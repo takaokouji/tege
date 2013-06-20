@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require "tege"
+
+class_or_module_list = Tege::Parser.parse(ARGV.shift)
+class_or_module_list.each do |com|
+  puts "= " + com.name
+  if com.public_instance_method_list.length > 0
+    puts "== Instance methods"
+    puts "* " + com.public_instance_method_list.map(&:name).join("\n* ")
+  end
+  if com.public_class_method_list.length > 0
+    puts "== Class methods"
+    puts "* " + com.public_class_method_list.map(&:name).join("\n* ")
+  end
+end
