@@ -29,25 +29,26 @@ module Tege
       private
     
       def extract_class_or_module(context, class_or_module_list = [])
-      if context.classes.empty?
-        if context.modules.empty?
-          if context.is_a?(RDoc::NormalModule)
-            class_or_module_list.unshift(Tege::Module.new(context))
+        if context.classes.empty?
+          if context.modules.empty?
+            if context.is_a?(RDoc::NormalModule)
+              class_or_module_list.unshift(Tege::Module.new(context))
+            end
+          else
+            class_or_module_list.unshift(*context.modules.map { |m|
+                                           Tege::Module.new(m)
+                                         })
+            context.modules.each do |m|
+              extract_class_or_module(m, class_or_module_list)
+            end
           end
         else
-          class_or_module_list.unshift(*context.modules.map { |m|
-                                         Tege::Module.new(m)
+          class_or_module_list.unshift(*context.classes.map { |c|
+                                         Tege::Class.new(c)
                                        })
-          context.modules.each do |m|
-            extract_class_or_module(m, class_or_module_list)
-          end
         end
-      else
-        class_or_module_list.unshift(*context.classes.map { |c|
-                                       Tege::Class.new(c)
-                                     })
+        class_or_module_list
       end
-      class_or_module_list
     end
   end
 end
