@@ -23,28 +23,23 @@ module Tege
         parser = RDoc::Parser::Ruby.new(top_level, path, File.read(path),
                                         RDoc::Options.new, stats)
         top_level = parser.scan
-        return extract_class_or_module(top_level)
+        return extract_class_or_module(top_level, path)
       end
 
       private
     
-      def extract_class_or_module(context, class_or_module_list = [])
-        if context.classes.empty?
-          if context.modules.empty?
-            if context.is_a?(RDoc::NormalModule)
-              class_or_module_list.unshift(Tege::Module.new(context))
-            end
-          else
-            class_or_module_list.unshift(*context.modules.map { |m|
-                                           Tege::Module.new(m)
-                                         })
-            context.modules.each do |m|
-              extract_class_or_module(m, class_or_module_list)
-            end
+      def extract_class_or_module(context, path, class_or_module_list = [])
+        if context.modules.length > 0
+          class_or_module_list.unshift(*context.modules.map { |m|
+                                         Tege::Module.new(m, path)
+                                       })
+          context.modules.each do |m|
+            extract_class_or_module(m, path, class_or_module_list)
           end
-        else
+        end
+        if context.classes.length > 0
           class_or_module_list.unshift(*context.classes.map { |c|
-                                         Tege::Class.new(c)
+                                         Tege::Class.new(c, path)
                                        })
         end
         class_or_module_list

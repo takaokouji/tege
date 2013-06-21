@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Tege::VERSION
   spec.authors       = ["Kouji Takao"]
   spec.email         = ["kouji.takao@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{a test code generator for Ruby on Rails and RSpec.}
+  spec.summary       = %q{tege is a test code generator for Ruby on Rails and RSpec.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
